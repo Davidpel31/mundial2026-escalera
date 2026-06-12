@@ -1,0 +1,1065 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mundial 2026 — Reto Escalera</title>
+<style>
+  :root {
+    --bg: #0a0e1a;
+    --surface: #111827;
+    --surface2: #1a2235;
+    --surface3: #222d42;
+    --border: rgba(255,255,255,0.08);
+    --border2: rgba(255,255,255,0.15);
+    --text: #f0f4ff;
+    --text2: #8b9dc3;
+    --text3: #4a5a7a;
+    --gold: #f5c842;
+    --gold2: #e6a800;
+    --green: #22c55e;
+    --green2: #166534;
+    --red: #ef4444;
+    --red2: #7f1d1d;
+    --blue: #3b82f6;
+    --blue2: #1e3a5f;
+    --amber: #f59e0b;
+    --teal: #14b8a6;
+    --radius: 10px;
+    --radius-lg: 16px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--bg); color: var(--text); font-family: 'Segoe UI', system-ui, sans-serif; font-size: 14px; line-height: 1.6; }
+  
+  /* NAV */
+  nav { background: var(--surface); border-bottom: 1px solid var(--border); position: sticky; top: 0; z-index: 100; }
+  .nav-inner { max-width: 1200px; margin: 0 auto; padding: 0 1.5rem; display: flex; align-items: center; gap: 0; }
+  .nav-logo { font-size: 16px; font-weight: 700; color: var(--gold); padding: 1rem 1rem 1rem 0; border-right: 1px solid var(--border); margin-right: 0.5rem; white-space: nowrap; }
+  .nav-logo span { color: var(--text2); font-weight: 400; font-size: 13px; margin-left: 6px; }
+  .nav-tabs { display: flex; gap: 0; overflow-x: auto; flex: 1; }
+  .nav-tab { padding: 1rem 1.1rem; font-size: 13px; color: var(--text2); cursor: pointer; border-bottom: 2px solid transparent; white-space: nowrap; transition: all .15s; }
+  .nav-tab:hover { color: var(--text); }
+  .nav-tab.active { color: var(--gold); border-bottom-color: var(--gold); }
+
+  /* LAYOUT */
+  .page { display: none; max-width: 1200px; margin: 0 auto; padding: 2rem 1.5rem; }
+  .page.active { display: block; }
+
+  /* SECTION HEADERS */
+  h1 { font-size: 22px; font-weight: 700; color: var(--text); margin-bottom: .25rem; }
+  h2 { font-size: 16px; font-weight: 600; color: var(--text); margin-bottom: 1rem; }
+  h3 { font-size: 14px; font-weight: 600; color: var(--text2); text-transform: uppercase; letter-spacing: .05em; margin-bottom: .75rem; }
+  .subtitle { color: var(--text2); font-size: 13px; margin-bottom: 1.5rem; }
+
+  /* CARDS */
+  .card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 1.25rem; margin-bottom: 1rem; }
+  .card-sm { background: var(--surface2); border: 1px solid var(--border); border-radius: var(--radius); padding: .85rem 1rem; }
+
+  /* GRID */
+  .grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; }
+  .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; }
+  .grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: .75rem; }
+  @media(max-width:700px) { .grid-2,.grid-3,.grid-4 { grid-template-columns: 1fr; } }
+
+  /* STAT CHIPS */
+  .stat-chip { text-align: center; }
+  .stat-chip .val { font-size: 22px; font-weight: 700; color: var(--gold); display: block; }
+  .stat-chip .lbl { font-size: 11px; color: var(--text3); text-transform: uppercase; letter-spacing: .05em; }
+
+  /* BADGES */
+  .badge { display: inline-block; font-size: 11px; font-weight: 600; padding: 2px 8px; border-radius: 20px; }
+  .badge-green { background: rgba(34,197,94,.15); color: var(--green); }
+  .badge-red { background: rgba(239,68,68,.15); color: var(--red); }
+  .badge-amber { background: rgba(245,158,11,.15); color: var(--amber); }
+  .badge-blue { background: rgba(59,130,246,.15); color: var(--blue); }
+  .badge-gray { background: rgba(139,157,195,.1); color: var(--text2); }
+  .badge-gold { background: rgba(245,200,66,.15); color: var(--gold); }
+
+  /* INPUTS */
+  input[type=text], input[type=number], select {
+    background: var(--surface2); border: 1px solid var(--border2); border-radius: var(--radius);
+    color: var(--text); padding: 7px 10px; font-size: 14px; width: 100%;
+    transition: border .15s; outline: none;
+  }
+  input[type=text]:focus, input[type=number]:focus, select:focus { border-color: var(--gold); }
+  input[type=number] { -moz-appearance: textfield; }
+  input[type=number]::-webkit-outer-spin-button, input[type=number]::-webkit-inner-spin-button { -webkit-appearance: none; }
+
+  /* BUTTONS */
+  .btn { display: inline-flex; align-items: center; gap: 6px; padding: 8px 16px; border-radius: var(--radius); font-size: 13px; font-weight: 600; cursor: pointer; border: none; transition: all .15s; }
+  .btn-gold { background: var(--gold); color: #000; }
+  .btn-gold:hover { background: var(--gold2); }
+  .btn-outline { background: transparent; border: 1px solid var(--border2); color: var(--text2); }
+  .btn-outline:hover { border-color: var(--gold); color: var(--gold); }
+  .btn-red { background: rgba(239,68,68,.15); border: 1px solid rgba(239,68,68,.3); color: var(--red); }
+  .btn-sm { padding: 4px 10px; font-size: 12px; }
+  .btn-green { background: rgba(34,197,94,.15); border: 1px solid rgba(34,197,94,.3); color: var(--green); }
+
+  /* GROUP FILTER */
+  .group-filter { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 1.25rem; }
+  .gf-btn { padding: 5px 12px; border-radius: 20px; font-size: 12px; font-weight: 600; cursor: pointer; border: 1px solid var(--border2); background: transparent; color: var(--text2); transition: all .15s; }
+  .gf-btn:hover, .gf-btn.active { background: var(--gold); color: #000; border-color: var(--gold); }
+
+  /* MATCH CARD */
+  .match-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); margin-bottom: .85rem; overflow: hidden; }
+  .match-header { display: flex; align-items: center; justify-content: space-between; padding: .6rem 1rem; background: var(--surface2); border-bottom: 1px solid var(--border); font-size: 11px; color: var(--text2); }
+  .match-body { padding: 1rem; }
+  .match-teams { display: flex; align-items: center; gap: 12px; margin-bottom: .85rem; }
+  .team-box { flex: 1; }
+  .team-box.home { text-align: right; }
+  .team-name { font-size: 15px; font-weight: 700; color: var(--text); }
+  .team-sub { font-size: 11px; color: var(--text2); }
+  .score-box { display: flex; align-items: center; gap: 6px; }
+  .score-input { width: 44px; text-align: center; font-size: 18px; font-weight: 700; padding: 6px 4px; }
+  .score-sep { color: var(--text3); font-size: 16px; font-weight: 300; }
+  .fav-label { text-align: center; margin-bottom: .75rem; }
+  .stats-grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: .75rem; }
+  .stat-row { display: flex; justify-content: space-between; padding: 3px 0; font-size: 12px; }
+  .stat-lbl { color: var(--text2); }
+  .stat-val2 { font-weight: 600; color: var(--text); }
+  .ref-bar { display: flex; align-items: flex-start; gap: 8px; background: var(--surface3); border-radius: var(--radius); padding: .6rem .75rem; margin-top: .5rem; font-size: 12px; }
+  .ref-name { font-weight: 600; color: var(--teal); }
+  .ref-stats-row { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 3px; color: var(--text2); }
+  .ref-stat-item { display: flex; align-items: center; gap: 3px; }
+
+  /* STANDINGS TABLE */
+  .standings-wrap { overflow-x: auto; }
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  thead tr { border-bottom: 1px solid var(--border2); }
+  th { padding: 7px 10px; text-align: left; color: var(--text3); font-weight: 600; font-size: 11px; text-transform: uppercase; letter-spacing: .05em; white-space: nowrap; }
+  td { padding: 7px 10px; border-bottom: 1px solid var(--border); white-space: nowrap; }
+  tr:last-child td { border-bottom: none; }
+  tr.qualify-direct td:first-child { border-left: 3px solid var(--green); }
+  tr.qualify-3rd td:first-child { border-left: 3px solid var(--amber); }
+  tr.eliminated td:first-child { border-left: 3px solid var(--red); }
+  .pos-num { width: 28px; font-weight: 700; color: var(--text2); }
+  .team-flag { font-size: 16px; margin-right: 6px; }
+
+  /* LADDER / BANKROLL */
+  .ladder-entry { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 1.25rem; margin-bottom: .85rem; position: relative; }
+  .ladder-entry.won { border-left: 3px solid var(--green); }
+  .ladder-entry.lost { border-left: 3px solid var(--red); }
+  .ladder-entry.pending { border-left: 3px solid var(--amber); }
+  .ladder-num { position: absolute; top: .85rem; right: 1rem; font-size: 11px; color: var(--text3); font-weight: 600; }
+  .result-badge { display: inline-block; padding: 3px 10px; border-radius: 20px; font-size: 12px; font-weight: 700; margin-top: 6px; }
+  .result-badge.won { background: rgba(34,197,94,.2); color: var(--green); }
+  .result-badge.lost { background: rgba(239,68,68,.2); color: var(--red); }
+  .result-badge.pending { background: rgba(245,158,11,.2); color: var(--amber); }
+
+  /* CAPITAL SUMMARY */
+  .capital-display { font-size: 32px; font-weight: 800; color: var(--gold); }
+  .capital-change { font-size: 13px; margin-top: 2px; }
+  .capital-change.up { color: var(--green); }
+  .capital-change.down { color: var(--red); }
+
+  /* DIVIDER */
+  .divider { height: 1px; background: var(--border); margin: 1.5rem 0; }
+
+  /* SEARCH */
+  .search-bar { position: relative; margin-bottom: 1rem; }
+  .search-bar input { padding-left: 32px; }
+  .search-icon { position: absolute; left: 10px; top: 50%; transform: translateY(-50%); color: var(--text3); font-size: 14px; }
+
+  /* TOAST */
+  .toast { position: fixed; bottom: 1.5rem; left: 50%; transform: translateX(-50%); background: var(--green); color: #000; padding: 10px 20px; border-radius: 30px; font-weight: 600; font-size: 13px; z-index: 999; opacity: 0; transition: opacity .3s; pointer-events: none; }
+  .toast.show { opacity: 1; }
+
+  /* HERO BANNER */
+  .hero { background: linear-gradient(135deg, var(--surface2) 0%, #1a2a40 100%); border: 1px solid var(--border2); border-radius: var(--radius-lg); padding: 1.5rem; margin-bottom: 1.5rem; display: flex; align-items: center; gap: 1.5rem; }
+  .hero-icon { font-size: 40px; }
+  .hero-text h1 { font-size: 20px; margin-bottom: .25rem; }
+
+  /* PROGRESS */
+  .progress-bar { height: 6px; background: var(--surface3); border-radius: 3px; overflow: hidden; margin-top: 6px; }
+  .progress-fill { height: 100%; background: var(--gold); border-radius: 3px; transition: width .3s; }
+
+  /* MOBILE */
+  @media(max-width: 600px) {
+    .nav-logo span { display: none; }
+    .page { padding: 1rem; }
+    .match-teams { flex-wrap: wrap; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-inner">
+    <div class="nav-logo">⚽ M26 <span>Reto Escalera</span></div>
+    <div class="nav-tabs">
+      <div class="nav-tab active" onclick="showPage('dashboard')">Dashboard</div>
+      <div class="nav-tab" onclick="showPage('partidos')">Partidos</div>
+      <div class="nav-tab" onclick="showPage('grupos')">Grupos</div>
+      <div class="nav-tab" onclick="showPage('escalera')">Escalera</div>
+    </div>
+  </div>
+</nav>
+
+<!-- DASHBOARD -->
+<div id="page-dashboard" class="page active">
+  <div class="hero">
+    <div class="hero-icon">🏆</div>
+    <div class="hero-text">
+      <h1>Copa Mundial FIFA 2026™</h1>
+      <p class="subtitle">Tu centro de análisis, escalera de apuestas y seguimiento de grupos — todo en un solo lugar.</p>
+    </div>
+  </div>
+  <div class="grid-4" id="dash-stats" style="margin-bottom:1.5rem"></div>
+  <div class="grid-2">
+    <div>
+      <h2>Progreso de la escalera</h2>
+      <div id="dash-ladder-preview"></div>
+    </div>
+    <div>
+      <h2>Resumen de capital</h2>
+      <div class="card" id="dash-capital"></div>
+    </div>
+  </div>
+</div>
+
+<!-- PARTIDOS -->
+<div id="page-partidos" class="page">
+  <h1>Análisis de Partidos</h1>
+  <p class="subtitle">Estadísticas, árbitros confirmados por FIFA y favorito de cada partido. Ingresa el marcador real.</p>
+  <div class="group-filter" id="group-filter"></div>
+  <div class="search-bar">
+    <span class="search-icon">🔍</span>
+    <input type="text" id="match-search" placeholder="Buscar equipo..." oninput="renderMatches()">
+  </div>
+  <div id="matches-container"></div>
+</div>
+
+<!-- GRUPOS -->
+<div id="page-grupos" class="page">
+  <h1>Tablas de Grupos</h1>
+  <p class="subtitle">Se actualiza automáticamente con los resultados que ingreses en la sección Partidos.</p>
+  <div id="groups-container"></div>
+</div>
+
+<!-- ESCALERA -->
+<div id="page-escalera" class="page">
+  <h1>Reto Escalera</h1>
+  <p class="subtitle">Registra tu capital, cuota y resultado de cada apuesta. La escalera se acumula automáticamente.</p>
+  <div class="grid-2" style="margin-bottom:1.5rem">
+    <div class="card">
+      <h3>Capital inicial</h3>
+      <div style="display:flex;gap:8px;align-items:center">
+        <input type="number" id="initial-capital" placeholder="Ej: 50000" min="0" step="1000" style="flex:1" oninput="saveCapital()">
+        <span style="color:var(--text2);font-size:13px">COP</span>
+      </div>
+      <p style="font-size:11px;color:var(--text3);margin-top:6px">Ingresa tu capital de partida para la escalera</p>
+    </div>
+    <div class="card" id="current-capital-card"></div>
+  </div>
+  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem">
+    <h2 style="margin:0">Nueva apuesta</h2>
+    <button class="btn btn-gold" onclick="openAddBet()">+ Agregar apuesta</button>
+  </div>
+  <div id="add-bet-form" style="display:none" class="card" id="bet-form-card">
+    <h2 style="margin-bottom:1rem">Registrar apuesta</h2>
+    <div class="grid-2" style="gap:1rem;margin-bottom:1rem">
+      <div>
+        <label style="font-size:12px;color:var(--text2);display:block;margin-bottom:4px">Partido</label>
+        <input type="text" id="bet-match" placeholder="Ej: Argentina vs Argelia">
+      </div>
+      <div>
+        <label style="font-size:12px;color:var(--text2);display:block;margin-bottom:4px">Tipo de apuesta</label>
+        <input type="text" id="bet-type" placeholder="Ej: Ganador, +2.5 goles...">
+      </div>
+      <div>
+        <label style="font-size:12px;color:var(--text2);display:block;margin-bottom:4px">Capital apostado</label>
+        <input type="number" id="bet-amount" placeholder="0" min="0" oninput="previewBet()">
+      </div>
+      <div>
+        <label style="font-size:12px;color:var(--text2);display:block;margin-bottom:4px">Cuota</label>
+        <input type="number" id="bet-odds" placeholder="Ej: 1.85" min="1" step="0.01" oninput="previewBet()">
+      </div>
+    </div>
+    <div class="card-sm" id="bet-preview" style="margin-bottom:1rem;display:none">
+      <div class="grid-3">
+        <div class="stat-chip">
+          <span class="val" id="prev-stake">—</span>
+          <span class="lbl">Apostado</span>
+        </div>
+        <div class="stat-chip">
+          <span class="val" id="prev-return">—</span>
+          <span class="lbl">Retorno bruto</span>
+        </div>
+        <div class="stat-chip">
+          <span class="val" id="prev-profit">—</span>
+          <span class="lbl">Ganancia</span>
+        </div>
+      </div>
+    </div>
+    <div style="margin-bottom:1rem">
+      <label style="font-size:12px;color:var(--text2);display:block;margin-bottom:4px">Resultado</label>
+      <div style="display:flex;gap:8px">
+        <button class="btn btn-outline" id="res-pending" onclick="selectResult('pending')">⏳ Pendiente</button>
+        <button class="btn btn-green" id="res-won" onclick="selectResult('won')">✅ Ganada</button>
+        <button class="btn btn-red" id="res-lost" onclick="selectResult('lost')">❌ Perdida</button>
+      </div>
+    </div>
+    <div style="display:flex;gap:8px">
+      <button class="btn btn-gold" onclick="saveBet()">Guardar apuesta</button>
+      <button class="btn btn-outline" onclick="closeAddBet()">Cancelar</button>
+    </div>
+  </div>
+  <div id="bets-container"></div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<script>
+// ============================================================
+// DATA: MATCHES (árbitros corregidos con fuente FIFA/FootyMetrics)
+// ============================================================
+const MATCHES = [
+  // GRUPO A
+  {id:'A1',group:'A',date:'11 jun',venue:'Ciudad de México',home:'México',away:'Sudáfrica',
+   ref:'Wilton Sampaio',refCountry:'Brasil',refConf:'CONMEBOL',refY:4.8,refR:0.21,refFouls:25.8,refGames:220,
+   hCorners:6.9,hShots:4.1,hOffside:2.1,hYellow:2.0,aCorners:5.2,aShots:2.5,aOffside:1.8,aYellow:2.8,
+   fav:'home',favLabel:'México favorito (local)'},
+  {id:'A2',group:'A',date:'11 jun',venue:'Guadalajara',home:'Corea del Sur',away:'Rep. Checa',
+   ref:'Amin Mohamed Omar',refCountry:'Egipto',refConf:'CAF',refY:3.9,refR:0.20,refFouls:16.9,refGames:115,
+   hCorners:8.4,hShots:3.5,hOffside:2.8,hYellow:2.6,aCorners:7.1,aShots:3.8,aOffside:2.2,aYellow:2.9,
+   fav:'draw',favLabel:'Partido equilibrado'},
+  {id:'A3',group:'A',date:'18 jun',venue:'Atlanta',home:'Rep. Checa',away:'Sudáfrica',
+   ref:'por confirmar',refCountry:'—',refConf:'—',refY:null,refR:null,refFouls:null,refGames:null,
+   hCorners:7.1,hShots:3.8,hOffside:2.2,hYellow:2.9,aCorners:5.2,aShots:2.5,aOffside:1.8,aYellow:2.8,
+   fav:'home',favLabel:'Rep. Checa favorita'},
+  {id:'A4',group:'A',date:'18 jun',venue:'Guadalajara',home:'México',away:'Corea del Sur',
+   ref:'por confirmar',refCountry:'—',refConf:'—',refY:null,refR:null,refFouls:null,refGames:null,
+   hCorners:6.9,hShots:4.1,hOffside:2.1,hYellow:2.0,aCorners:8.4,aShots:3.5,aOffside:2.8,aYellow:2.6,
+   fav:'draw',favLabel:'Muy parejo'},
+  {id:'A5',group:'A',date:'24 jun',venue:'Ciudad de México',home:'Rep. Checa',away:'México',
+   ref:'por confirmar',refCountry:'—',refConf:'—',refY:null,refR:null,refFouls:null,refGames:null,
+   hCorners:7.1,hShots:3.8,hOffside:2.2,hYellow:2.9,aCorners:6.9,aShots:4.1,aOffside:2.1,aYellow:2.0,
+   fav:'away',favLabel:'México ligero favorito'},
+  {id:'A6',group:'A',date:'24 jun',venue:'Atlanta',home:'Sudáfrica',away:'Corea del Sur',
+   ref:'por confirmar',refCountry:'—',refConf:'—',refY:null,refR:null,refFouls:null,refGames:null,
+   hCorners:5.2,hShots:2.5,hOffside:1.8,hYellow:2.8,aCorners:8.4,aShots:3.5,aOffside:2.8,aYellow:2.6,
+   fav:'away',favLabel:'Corea del Sur favorita'},
+
+  // GRUPO B
+  {id:'B1',group:'B',date:'12 jun',venue:'Toronto',home:'Canadá',away:'Bosnia y Herz.',
+   ref:'Facundo Tello Figueroa',refCountry:'Argentina',refConf:'CONMEBOL',refY:4.7,refR:0.25,refFouls:24.0,refGames:246,
+   hCorners:7.5,hShots:3.2,hOffside:1.9,hYellow:1.7,aCorners:8.1,aShots:3.6,aOffside:2.3,aYellow:3.4,
+   fav:'home',favLabel:'Canadá favorito'},
+  {id:'B2',group:'B',date:'13 jun',venue:'San Francisco',home:'Qatar',away:'Suiza',
+   ref:'Héctor Said Martínez',refCountry:'Honduras',refConf:'CONCACAF',refY:3.2,refR:0.33,refFouls:21.8,refGames:6,
+   hCorners:8.0,hShots:3.5,hOffside:2.2,hYellow:2.3,aCorners:8.7,aShots:3.8,aOffside:2.1,aYellow:3.2,
+   fav:'away',favLabel:'Suiza gran favorita'},
+  {id:'B3',group:'B',date:'19 jun',venue:'Kansas City',home:'Bosnia y Herz.',away:'Qatar',
+   ref:'por confirmar',refCountry:'—',refConf:'—',refY:null,refR:null,refFouls:null,refGames:null,
+   hCorners:8.1,hShots:3.6,hOffside:2.3,hYellow:3.4,aCorners:8.0,aShots:3.5,aOffside:2.2,aYellow:2.3,
+   fav:'home',favLabel:'Bosnia ligera favorita'},
+  {id:'B4',group:'B',date:'19 jun',venue:'Seattle',home:'Canadá',away:'Suiza',
+   ref:'por confirmar',refCountry:'—',refConf:'—',refY:null,refR:null,refFouls:null,refGames:null,
+   hCorners:7.5,hShots:3.2,hOffside:1.9,hYellow:1.7,aCorners:8.7,aShots:3.8,aOffside:2.1,aYellow:3.2,
+   fav:'away',favLabel:'Suiza ligera favorita'},
+  {id:'B5',group:'B',date:'25 jun',venue:'Dallas',home:'Bosnia y Herz.',away:'Canadá',
+   ref:'por confirmar',refCountry:'—',refConf:'—',refY:null,refR:null,refFouls:null,refGames:null,
+   hCorners:8.1,hShots:3.6,hOffside:2.3,hYellow:3.4,aCorners:7.5,aShots:3.2,aOffside:1.9,aYellow:1.7,
+   fav:'away',favLabel:'Canadá favorito'},
+  {id:'B6',group:'B',date:'25 jun',venue:'Nueva York',home:'Suiza',away:'Qatar',
+   ref:'por confirmar',refCountry:'—',refConf:'—',refY:null,refR:null,refFouls:null,refGames:null,
+   hCorners:8.7,hShots:3.8,hOffside:2.1,hYellow:3.2,aCorners:8.0,aShots:3.5,aOffside:2.2,aYellow:2.3,
+   fav:'home',favLabel:'Suiza gran favorita'},
+
+  // GRUPO C
+  {id:'C1',group:'C',date:'13 jun',venue:'Los Ángeles',home:'Brasil',away:'Marruecos',
+   ref:'Slavko Vinčić',refCountry:'Eslovenia',refConf:'UEFA',refY:4.0,refR:0.13,refFouls:25.5,refGames:88,
+   hCorners:8.5,hShots:3.9,hOffside:2.4,hYellow:2.7,aCorners:7.6,aShots:3.3,aOffside:1.7,aYellow:2.0,
+   fav:'home',favLabel:'Brasil favorito'},
+  {id:'C2',group:'C',date:'14 jun',venue:'Boston',home:'Haití',away:'Escocia',
+   ref:'Mustapha Ghorbal',refCountry:'Argelia',refConf:'CAF',refY:4.0,refR:0.27,refFouls:28.8,refGames:30,
+   hCorners:6.1,hShots:2.8,hOffside:1.6,hYellow:2.9,aCorners:7.9,aShots:3.6,aOffside:2.3,aYellow:3.4,
+   fav:'away',favLabel:'Escocia favorita'},
+  {id:'C3',group:'C',date:'19 jun',venue:'Seattle',home:'Marruecos',away:'Haití',
+   ref:'por confirmar',refCountry:'—',refConf:'—',refY:null,refR:null,refFouls:null,refGames:null,
+   hCorners:7.6,hShots:3.3,hOffside:1.7,hYellow:2.0,aCorners:6.1,aShots:2.8,aOffside:1.6,aYellow:2.9,
+   fav:'home',favLabel:'Marruecos favorito'},
+  {id:'C4',group:'C',date:'20 jun',venue:'Dallas',home:'Brasil',away:'Escocia',
+   ref:'por confirmar',refCountry:'—',refConf:'—',refY:null,refR:null,refFouls:null,refGames:null,
+   hCorners:8.5,hShots:3.9,hOffside:2.4,hYellow:2.7,aCorners:7.9,aShots:3.6,aOffside:2.3,aYellow:3.4,
+   fav:'home',favLabel:'Brasil gran favorito'},
+  {id:'C5',group:'C',date:'25 jun',venue:'Miami',home:'Haití',away:'Brasil',
+   ref:'por confirmar',refCountry:'—',refConf:'—',refY:null,refR:null,refFouls:null,refGames:null,
+   hCorners:6.1,hShots:2.8,hOffside:1.6,hYellow:2.9,aCorners:8.5,aShots:3.9,aOffside:2.4,aYellow:2.7,
+   fav:'away',favLabel:'Brasil gran favorito'},
+  {id:'C6',group:'C',date:'25 jun',venue:'Houston',home:'Escocia',away:'Marruecos',
+   ref:'por confirmar',refCountry:'—',refConf:'—',refY:null,refR:null,refFouls:null,refGames:null,
+   hCorners:7.9,hShots:3.6,hOffside:2.3,hYellow:3.4,aCorners:7.6,aShots:3.3,aOffside:1.7,aYellow:2.0,
+   fav:'draw',favLabel:'Muy equilibrado'},
+
+  // GRUPO D
+  {id:'D1',group:'D',date:'12 jun',venue:'Los Ángeles',home:'USA',away:'Paraguay',
+   ref:'Danny Desmond Makkelie',refCountry:'Curazao',refConf:'UEFA',refY:3.4,refR:0.15,refFouls:22.3,refGames:253,
+   hCorners:10.2,hShots:3.9,hOffside:2.6,hYellow:3.1,aCorners:7.8,aShots:3.2,aOffside:2.0,aYellow:3.5,
+   fav:'home',favLabel:'USA favorito (local)'},
+  {id:'D2',group:'D',date:'13 jun',venue:'Vancouver',home:'Australia',away:'Turquía',
+   ref:'Jesús Valenzuela Sáez',refCountry:'Venezuela',refConf:'CONMEBOL',refY:5.2,refR:0.24,refFouls:27.4,refGames:86,
+   hCorners:7.6,hShots:2.9,hOffside:1.8,hYellow:2.5,aCorners:8.2,aShots:3.7,aOffside:2.5,aYellow:3.3,
+   fav:'draw',favLabel:'Parejo — leve ventaja Turquía'},
+  {id:'D3',group:'D',date:'19 jun',venue:'Seattle',home:'USA',away:'Australia',
+   ref:'por confirmar',refCountry:'—',refConf:'—',refY:null,refR:null,refFouls:null,refGames:null,
+   hCorners:10.2,hShots:3.9,hOffside:2.6,hYellow:3.1,aCorners:7.6,aShots:2.9,aOffside:1.8,aYellow:2.5,
+   fav:'home',favLabel:'USA favorito'},
+  {id:'D4',group:'D',date:'19 jun',venue:'Philadelphia',home:'Paraguay',away:'Turquía',
+   ref:'por confirmar',refCountry:'—',refConf:'—',refY:null,refR:null,refFouls:null,refGames:null,
+   hCorners:7.8,hShots:3.2,hOffside:2.0,hYellow:3.5,aCorners:8.2,aShots:3.7,aOffside:2.5,aYellow:3.3,
+   fav:'away',favLabel:'Turquía ligera favorita'},
+  {id:'D5',group:'D',date:'25 jun',venue:'Los Ángeles',home:'USA',away:'Turquía',
+   ref:'por confirmar',refCountry:'—',refConf:'—',refY:null,refR:null,refFouls:null,refGames:null,
+   hCorners:10.2,hShots:3.9,hOffside:2.6,hYellow:3.1,aCorners:8.2,aShots:3.7,aOffside:2.5,aYellow:3.3,
+   fav:'home',favLabel:'USA favorito'},
+  {id:'D6',group:'D',date:'25 jun',venue:'Kansas City',home:'Paraguay',away:'Australia',
+   ref:'por confirmar',refCountry:'—',refConf:'—',refY:null,refR:null,refFouls:null,refGames:null,
+   hCorners:7.8,hShots:3.2,hOffside:2.0,hYellow:3.5,aCorners:7.6,aShots:2.9,aOffside:1.8,aYellow:2.5,
+   fav:'draw',favLabel:'Muy equilibrado'},
+
+  // GRUPO E
+  {id:'E1',group:'E',date:'14 jun',venue:'Houston',home:'Alemania',away:'Curazao',
+   ref:'por confirmar',refCountry:'—',refConf:'—',refY:null,refR:null,refFouls:null,refGames:null,
+   hCorners:10.2,hShots:4.2,hOffside:2.7,hYellow:3.3,aCorners:5.0,aShots:2.1,aOffside:1.4,aYellow:2.6,
+   fav:'home',favLabel:'Alemania gran favorita'},
+  {id:'E2',group:'E',date:'14 jun',venue:'Philadelphia',home:'Costa de Marfil',away:'Ecuador',
+   ref:'por confirmar',refCountry:'—',refConf:'—',refY:null,refR:null,refFouls:null,refGames:null,
+   hCorners:8.0,hShots:3.3,hOffside:2.0,hYellow:2.8,aCorners:7.6,aShots:3.1,aOffside:1.9,aYellow:1.0,
+   fav:'draw',favLabel:'Muy equilibrado'},
+  {id:'E3',group:'E',date:'20 jun',venue:'Dallas',home:'Alemania',away:'Costa de Marfil',
+   ref:'por confirmar',refCountry:'—',refConf:'—',refY:null,refR:null,refFouls:null,refGames:null,
+   hCorners:10.2,hShots:4.2,hOffside:2.7,hYellow:3.3,aCorners:8.0,aShots:3.3,aOffside:2.0,aYellow:2.8,
+   fav:'home',favLabel:'Alemania favorita'},
+  {id:'E4',group:'E',date:'20 jun',venue:'Miami',home:'Curazao',away:'Ecuador',
+   ref:'por confirmar',refCountry:'—',refConf:'—',refY:null,refR:null,refFouls:null,refGames:null,
+   hCorners:5.0,hShots:2.1,hOffside:1.4,hYellow:2.6,aCorners:7.6,aShots:3.1,aOffside:1.9,aYellow:1.0,
+   fav:'away',favLabel:'Ecuador favorito'},
+  {id:'E5',group:'E',date:'26 jun',venue:'Atlanta',home:'Alemania',away:'Ecuador',
+   ref:'por confirmar',refCountry:'—',refConf:'—',refY:null,refR:null,refFouls:null,refGames:null,
+   hCorners:10.2,hShots:4.2,hOffside:2.7,hYellow:3.3,aCorners:7.6,aShots:3.1,aOffside:1.9,aYellow:1.0,
+   fav:'home',favLabel:'Alemania favorita'},
+  {id:'E6',group:'E',date:'26 jun',venue:'Boston',home:'Curazao',away:'Costa de Marfil',
+   ref:'por confirmar',refCountry:'—',refConf:'—',refY:null,refR:null,refFouls:null,refGames:null,
+   hCorners:5.0,hShots:2.1,hOffside:1.4,hYellow:2.6,aCorners:8.0,aShots:3.3,aOffside:2.0,aYellow:2.8,
+   fav:'away',favLabel:'Costa de Marfil favorita'},
+
+  // GRUPO F
+  {id:'F1',group:'F',date:'14 jun',venue:'Dallas',home:'Países Bajos',away:'Japón',
+   ref:'François Letexier',refCountry:'Francia',refConf:'UEFA',refY:4.0,refR:0.22,refFouls:22.5,refGames:182,
+   hCorners:7.9,hShots:4.1,hOffside:2.3,hYellow:4.1,aCorners:7.7,aShots:3.5,aOffside:2.6,aYellow:3.2,
+   fav:'home',favLabel:'Países Bajos favoritos'},
+  {id:'F2',group:'F',date:'14 jun',venue:'Monterrey',home:'Suecia',away:'Túnez',
+   ref:'por confirmar',refCountry:'—',refConf:'—',refY:null,refR:null,refFouls:null,refGames:null,
+   hCorners:9.0,hShots:3.8,hOffside:2.1,hYellow:3.2,aCorners:9.7,aShots:3.4,aOffside:2.0,aYellow:3.0,
+   fav:'home',favLabel:'Suecia favorita'},
+  {id:'F3',group:'F',date:'20 jun',venue:'San Francisco',home:'Países Bajos',away:'Suecia',
+   ref:'por confirmar',refCountry:'—',refConf:'—',refY:null,refR:null,refFouls:null,refGames:null,
+   hCorners:7.9,hShots:4.1,hOffside:2.3,hYellow:4.1,aCorners:9.0,aShots:3.8,aOffside:2.1,aYellow:3.2,
+   fav:'home',favLabel:'Países Bajos favoritos'},
+  {id:'F4',group:'F',date:'21 jun',venue:'Houston',home:'Japón',away:'Túnez',
+   ref:'por confirmar',refCountry:'—',refConf:'—',refY:null,refR:null,refFouls:null,refGames:null,
+   hCorners:7.7,hShots:3.5,hOffside:2.6,hYellow:3.2,aCorners:9.7,aShots:3.4,aOffside:2.0,aYellow:3.0,
+   fav:'home',favLabel:'Japón favorito'},
+  {id:'F5',group:'F',date:'26 jun',venue:'Kansas City',home:'Países Bajos',away:'Túnez',
+   ref:'por confirmar',refCountry:'—',refConf:'—',refY:null,refR:null,refFouls:null,refGames:null,
+   hCorners:7.9,hShots:4.1,hOffside:2.3,hYellow:4.1,aCorners:9.7,aShots:3.4,aOffside:2.0,aYellow:3.0,
+   fav:'home',favLabel:'Países Bajos gran favorito'},
+  {id:'F6',group:'F',date:'26 jun',venue:'Vancouver',home:'Japón',away:'Suecia',
+   ref:'por confirmar',refCountry:'—',refConf:'—',refY:null,refR:null,refFouls:null,refGames:null,
+   hCorners:7.7,hShots:3.5,hOffside:2.6,hYellow:3.2,aCorners:9.0,aShots:3.8,aOffside:2.1,aYellow:3.2,
+   fav:'draw',favLabel:'Muy parejo'},
+
+  // GRUPO G
+  {id:'G1',group:'G',date:'15 jun',venue:'Seattle',home:'Bélgica',away:'Egipto',
+   ref:'por confirmar',refCountry:'—',refConf:'—',refY:null,refR:null,refFouls:null,refGames:null,
+   hCorners:12.1,hShots:4.5,hOffside:2.8,hYellow:4.3,aCorners:6.8,aShots:3.0,aOffside:1.9,aYellow:2.5,
+   fav:'home',favLabel:'Bélgica gran favorita'},
+  {id:'G2',group:'G',date:'15 jun',venue:'Los Ángeles',home:'Irán',away:'Nueva Zelanda',
+   ref:'por confirmar',refCountry:'—',refConf:'—',refY:null,refR:null,refFouls:null,refGames:null,
+   hCorners:9.0,hShots:3.5,hOffside:2.3,hYellow:2.1,aCorners:6.5,aShots:2.6,aOffside:1.5,aYellow:2.8,
+   fav:'home',favLabel:'Irán favorito'},
+  {id:'G3',group:'G',date:'21 jun',venue:'Miami',home:'Bélgica',away:'Irán',
+   ref:'por confirmar',refCountry:'—',refConf:'—',refY:null,refR:null,refFouls:null,refGames:null,
+   hCorners:12.1,hShots:4.5,hOffside:2.8,hYellow:4.3,aCorners:9.0,aShots:3.5,aOffside:2.3,aYellow:2.1,
+   fav:'home',favLabel:'Bélgica favorita'},
+  {id:'G4',group:'G',date:'21 jun',venue:'Dallas',home:'Egipto',away:'Nueva Zelanda',
+   ref:'por confirmar',refCountry:'—',refConf:'—',refY:null,refR:null,refFouls:null,refGames:null,
+   hCorners:6.8,hShots:3.0,hOffside:1.9,hYellow:2.5,aCorners:6.5,aShots:2.6,aOffside:1.5,aYellow:2.8,
+   fav:'home',favLabel:'Egipto favorito'},
+  {id:'G5',group:'G',date:'26 jun',venue:'Nueva York',home:'Bélgica',away:'Nueva Zelanda',
+   ref:'por confirmar',refCountry:'—',refConf:'—',refY:null,refR:null,refFouls:null,refGames:null,
+   hCorners:12.1,hShots:4.5,hOffside:2.8,hYellow:4.3,aCorners:6.5,aShots:2.6,aOffside:1.5,aYellow:2.8,
+   fav:'home',favLabel:'Bélgica gran favorita'},
+  {id:'G6',group:'G',date:'26 jun',venue:'Boston',home:'Irán',away:'Egipto',
+   ref:'por confirmar',refCountry:'—',refConf:'—',refY:null,refR:null,refFouls:null,refGames:null,
+   hCorners:9.0,hShots:3.5,hOffside:2.3,hYellow:2.1,aCorners:6.8,aShots:3.0,aOffside:1.9,aYellow:2.5,
+   fav:'draw',favLabel:'Equilibrado'},
+
+  // GRUPO H
+  {id:'H1',group:'H',date:'15 jun',venue:'Atlanta',home:'España',away:'Cabo Verde',
+   ref:'por confirmar',refCountry:'—',refConf:'—',refY:null,refR:null,refFouls:null,refGames:null,
+   hCorners:8.8,hShots:5.1,hOffside:2.4,hYellow:4.6,aCorners:5.5,aShots:2.3,aOffside:1.4,aYellow:2.7,
+   fav:'home',favLabel:'España gran favorita'},
+  {id:'H2',group:'H',date:'15 jun',venue:'Miami',home:'Arabia Saudita',away:'Uruguay',
+   ref:'por confirmar',refCountry:'—',refConf:'—',refY:null,refR:null,refFouls:null,refGames:null,
+   hCorners:6.9,hShots:3.1,hOffside:1.8,hYellow:2.0,aCorners:10.2,aShots:3.6,aOffside:2.2,aYellow:1.8,
+   fav:'away',favLabel:'Uruguay ligero favorito'},
+  {id:'H3',group:'H',date:'21 jun',venue:'Dallas',home:'España',away:'Arabia Saudita',
+   ref:'Alejandro J. Hernández',refCountry:'España',refConf:'UEFA',refY:5.2,refR:0.23,refFouls:25.4,refGames:164,
+   hCorners:8.8,hShots:5.1,hOffside:2.4,hYellow:4.6,aCorners:6.9,aShots:3.1,aOffside:1.8,aYellow:2.0,
+   fav:'home',favLabel:'España favorita'},
+  {id:'H4',group:'H',date:'21 jun',venue:'Houston',home:'Cabo Verde',away:'Uruguay',
+   ref:'por confirmar',refCountry:'—',refConf:'—',refY:null,refR:null,refFouls:null,refGames:null,
+   hCorners:5.5,hShots:2.3,hOffside:1.4,hYellow:2.7,aCorners:10.2,aShots:3.6,aOffside:2.2,aYellow:1.8,
+   fav:'away',favLabel:'Uruguay favorito'},
+  {id:'H5',group:'H',date:'26 jun',venue:'Los Ángeles',home:'España',away:'Uruguay',
+   ref:'por confirmar',refCountry:'—',refConf:'—',refY:null,refR:null,refFouls:null,refGames:null,
+   hCorners:8.8,hShots:5.1,hOffside:2.4,hYellow:4.6,aCorners:10.2,aShots:3.6,aOffside:2.2,aYellow:1.8,
+   fav:'home',favLabel:'España favorita'},
+  {id:'H6',group:'H',date:'26 jun',venue:'San Francisco',home:'Arabia Saudita',away:'Cabo Verde',
+   ref:'por confirmar',refCountry:'—',refConf:'—',refY:null,refR:null,refFouls:null,refGames:null,
+   hCorners:6.9,hShots:3.1,hOffside:1.8,hYellow:2.0,aCorners:5.5,aShots:2.3,aOffside:1.4,aYellow:2.7,
+   fav:'home',favLabel:'Arabia Saudita favorita'},
+
+  // GRUPO I
+  {id:'I1',group:'I',date:'16 jun',venue:'Nueva York',home:'Francia',away:'Senegal',
+   ref:'Anthony Taylor',refCountry:'Inglaterra',refConf:'UEFA',refY:3.9,refR:0.16,refFouls:21.4,refGames:262,
+   hCorners:10.1,hShots:4.8,hOffside:2.5,hYellow:3.5,aCorners:8.7,aShots:3.7,aOffside:2.2,aYellow:3.3,
+   fav:'home',favLabel:'Francia favorita'},
+  {id:'I2',group:'I',date:'16 jun',venue:'Boston',home:'Irak',away:'Noruega',
+   ref:'por confirmar',refCountry:'—',refConf:'—',refY:null,refR:null,refFouls:null,refGames:null,
+   hCorners:6.5,hShots:2.8,hOffside:1.7,hYellow:2.6,aCorners:8.5,aShots:3.9,aOffside:2.3,aYellow:2.8,
+   fav:'away',favLabel:'Noruega favorita'},
+  {id:'I3',group:'I',date:'22 jun',venue:'Seattle',home:'Francia',away:'Irak',
+   ref:'por confirmar',refCountry:'—',refConf:'—',refY:null,refR:null,refFouls:null,refGames:null,
+   hCorners:10.1,hShots:4.8,hOffside:2.5,hYellow:3.5,aCorners:6.5,aShots:2.8,aOffside:1.7,aYellow:2.6,
+   fav:'home',favLabel:'Francia gran favorita'},
+  {id:'I4',group:'I',date:'22 jun',venue:'Los Ángeles',home:'Senegal',away:'Noruega',
+   ref:'por confirmar',refCountry:'—',refConf:'—',refY:null,refR:null,refFouls:null,refGames:null,
+   hCorners:8.7,hShots:3.7,hOffside:2.2,hYellow:3.3,aCorners:8.5,aShots:3.9,aOffside:2.3,aYellow:2.8,
+   fav:'draw',favLabel:'Muy parejo'},
+  {id:'I5',group:'I',date:'27 jun',venue:'Dallas',home:'Francia',away:'Noruega',
+   ref:'Michael Oliver',refCountry:'Inglaterra',refConf:'UEFA',refY:3.7,refR:0.14,refFouls:22.8,refGames:250,
+   hCorners:10.1,hShots:4.8,hOffside:2.5,hYellow:3.5,aCorners:8.5,aShots:3.9,aOffside:2.3,aYellow:2.8,
+   fav:'home',favLabel:'Francia favorita'},
+  {id:'I6',group:'I',date:'27 jun',venue:'Houston',home:'Irak',away:'Senegal',
+   ref:'por confirmar',refCountry:'—',refConf:'—',refY:null,refR:null,refFouls:null,refGames:null,
+   hCorners:6.5,hShots:2.8,hOffside:1.7,hYellow:2.6,aCorners:8.7,aShots:3.7,aOffside:2.2,aYellow:3.3,
+   fav:'away',favLabel:'Senegal favorito'},
+
+  // GRUPO J
+  {id:'J1',group:'J',date:'16 jun',venue:'Kansas City',home:'Argentina',away:'Argelia',
+   ref:'Raphael Claus',refCountry:'Brasil',refConf:'CONMEBOL',refY:4.1,refR:0.19,refFouls:24.0,refGames:224,
+   hCorners:6.7,hShots:4.0,hOffside:2.2,hYellow:2.3,aCorners:7.2,aShots:3.0,aOffside:1.9,aYellow:2.9,
+   fav:'home',favLabel:'Argentina gran favorita'},
+  {id:'J2',group:'J',date:'16 jun',venue:'San Francisco',home:'Austria',away:'Jordania',
+   ref:'por confirmar',refCountry:'—',refConf:'—',refY:null,refR:null,refFouls:null,refGames:null,
+   hCorners:8.5,hShots:3.7,hOffside:2.1,hYellow:3.0,aCorners:6.3,aShots:2.6,aOffside:1.6,aYellow:2.4,
+   fav:'home',favLabel:'Austria favorita'},
+  {id:'J3',group:'J',date:'22 jun',venue:'Dallas',home:'Argentina',away:'Austria',
+   ref:'por confirmar',refCountry:'—',refConf:'—',refY:null,refR:null,refFouls:null,refGames:null,
+   hCorners:6.7,hShots:4.0,hOffside:2.2,hYellow:2.3,aCorners:8.5,aShots:3.7,aOffside:2.1,aYellow:3.0,
+   fav:'home',favLabel:'Argentina favorita'},
+  {id:'J4',group:'J',date:'22 jun',venue:'Miami',home:'Argelia',away:'Jordania',
+   ref:'por confirmar',refCountry:'—',refConf:'—',refY:null,refR:null,refFouls:null,refGames:null,
+   hCorners:7.2,hShots:3.0,hOffside:1.9,hYellow:2.9,aCorners:6.3,aShots:2.6,aOffside:1.6,aYellow:2.4,
+   fav:'home',favLabel:'Argelia favorita'},
+  {id:'J5',group:'J',date:'27 jun',venue:'Dallas',home:'Jordania',away:'Argentina',
+   ref:'por confirmar',refCountry:'—',refConf:'—',refY:null,refR:null,refFouls:null,refGames:null,
+   hCorners:6.3,hShots:2.6,hOffside:1.6,hYellow:2.4,aCorners:6.7,aShots:4.0,aOffside:2.2,aYellow:2.3,
+   fav:'away',favLabel:'Argentina gran favorita'},
+  {id:'J6',group:'J',date:'27 jun',venue:'Atlanta',home:'Argelia',away:'Austria',
+   ref:'por confirmar',refCountry:'—',refConf:'—',refY:null,refR:null,refFouls:null,refGames:null,
+   hCorners:7.2,hShots:3.0,hOffside:1.9,hYellow:2.9,aCorners:8.5,aShots:3.7,aOffside:2.1,aYellow:3.0,
+   fav:'draw',favLabel:'Muy equilibrado'},
+
+  // GRUPO K
+  {id:'K1',group:'K',date:'17 jun',venue:'Houston',home:'Portugal',away:'RD Congo',
+   ref:'por confirmar',refCountry:'—',refConf:'—',refY:null,refR:null,refFouls:null,refGames:null,
+   hCorners:9.9,hShots:4.5,hOffside:2.6,hYellow:4.2,aCorners:6.8,aShots:2.9,aOffside:1.8,aYellow:2.6,
+   fav:'home',favLabel:'Portugal gran favorito'},
+  {id:'K2',group:'K',date:'17 jun',venue:'Ciudad de México',home:'Colombia',away:'Uzbekistán',
+   ref:'César A. Ramos Palazuelos',refCountry:'México',refConf:'CONCACAF',refY:4.4,refR:0.42,refFouls:23.6,refGames:172,
+   hCorners:8.8,hShots:3.8,hOffside:2.3,hYellow:3.0,aCorners:7.1,aShots:3.1,aOffside:1.9,aYellow:2.5,
+   fav:'home',favLabel:'Colombia favorita'},
+  {id:'K3',group:'K',date:'23 jun',venue:'Seattle',home:'Portugal',away:'Colombia',
+   ref:'por confirmar',refCountry:'—',refConf:'—',refY:null,refR:null,refFouls:null,refGames:null,
+   hCorners:9.9,hShots:4.5,hOffside:2.6,hYellow:4.2,aCorners:8.8,aShots:3.8,aOffside:2.3,aYellow:3.0,
+   fav:'home',favLabel:'Portugal favorito'},
+  {id:'K4',group:'K',date:'23 jun',venue:'Miami',home:'Uzbekistán',away:'RD Congo',
+   ref:'por confirmar',refCountry:'—',refConf:'—',refY:null,refR:null,refFouls:null,refGames:null,
+   hCorners:7.1,hShots:3.1,hOffside:1.9,hYellow:2.5,aCorners:6.8,aShots:2.9,aOffside:1.8,aYellow:2.6,
+   fav:'draw',favLabel:'Muy parejo'},
+  {id:'K5',group:'K',date:'27 jun',venue:'Los Ángeles',home:'Portugal',away:'Uzbekistán',
+   ref:'por confirmar',refCountry:'—',refConf:'—',refY:null,refR:null,refFouls:null,refGames:null,
+   hCorners:9.9,hShots:4.5,hOffside:2.6,hYellow:4.2,aCorners:7.1,aShots:3.1,aOffside:1.9,aYellow:2.5,
+   fav:'home',favLabel:'Portugal gran favorito'},
+  {id:'K6',group:'K',date:'27 jun',venue:'Vancouver',home:'RD Congo',away:'Colombia',
+   ref:'por confirmar',refCountry:'—',refConf:'—',refY:null,refR:null,refFouls:null,refGames:null,
+   hCorners:6.8,hShots:2.9,hOffside:1.8,hYellow:2.6,aCorners:8.8,aShots:3.8,aOffside:2.3,aYellow:3.0,
+   fav:'away',favLabel:'Colombia favorita'},
+
+  // GRUPO L
+  {id:'L1',group:'L',date:'17 jun',venue:'Dallas',home:'Inglaterra',away:'Croacia',
+   ref:'Alireza Faghani',refCountry:'Australia/Irán',refConf:'AFC',refY:3.7,refR:0.11,refFouls:19.7,refGames:140,
+   hCorners:9.5,hShots:4.3,hOffside:2.5,hYellow:2.9,aCorners:12.3,aShots:4.1,aOffside:2.4,aYellow:3.4,
+   fav:'home',favLabel:'Inglaterra favorita'},
+  {id:'L2',group:'L',date:'17 jun',venue:'Toronto',home:'Ghana',away:'Panamá',
+   ref:'por confirmar',refCountry:'—',refConf:'—',refY:null,refR:null,refFouls:null,refGames:null,
+   hCorners:7.2,hShots:3.3,hOffside:2.0,hYellow:2.7,aCorners:6.8,aShots:2.9,aOffside:1.7,aYellow:3.1,
+   fav:'home',favLabel:'Ghana ligera favorita'},
+  {id:'L3',group:'L',date:'23 jun',venue:'Nueva York',home:'Inglaterra',away:'Ghana',
+   ref:'por confirmar',refCountry:'—',refConf:'—',refY:null,refR:null,refFouls:null,refGames:null,
+   hCorners:9.5,hShots:4.3,hOffside:2.5,hYellow:2.9,aCorners:7.2,aShots:3.3,aOffside:2.0,aYellow:2.7,
+   fav:'home',favLabel:'Inglaterra favorita'},
+  {id:'L4',group:'L',date:'23 jun',venue:'Seattle',home:'Croacia',away:'Panamá',
+   ref:'por confirmar',refCountry:'—',refConf:'—',refY:null,refR:null,refFouls:null,refGames:null,
+   hCorners:12.3,hShots:4.1,hOffside:2.4,hYellow:3.4,aCorners:6.8,aShots:2.9,aOffside:1.7,aYellow:3.1,
+   fav:'home',favLabel:'Croacia favorita'},
+  {id:'L5',group:'L',date:'27 jun',venue:'Kansas City',home:'Inglaterra',away:'Panamá',
+   ref:'por confirmar',refCountry:'—',refConf:'—',refY:null,refR:null,refFouls:null,refGames:null,
+   hCorners:9.5,hShots:4.3,hOffside:2.5,hYellow:2.9,aCorners:6.8,aShots:2.9,aOffside:1.7,aYellow:3.1,
+   fav:'home',favLabel:'Inglaterra gran favorita'},
+  {id:'L6',group:'L',date:'27 jun',venue:'Dallas',home:'Croacia',away:'Ghana',
+   ref:'por confirmar',refCountry:'—',refConf:'—',refY:null,refR:null,refFouls:null,refGames:null,
+   hCorners:12.3,hShots:4.1,hOffside:2.4,hYellow:3.4,aCorners:7.2,aShots:3.3,aOffside:2.0,aYellow:2.7,
+   fav:'home',favLabel:'Croacia ligera favorita'},
+];
+
+// GROUP TEAMS
+const GROUP_TEAMS = {
+  A:['México','Corea del Sur','Rep. Checa','Sudáfrica'],
+  B:['Canadá','Suiza','Qatar','Bosnia y Herz.'],
+  C:['Brasil','Marruecos','Escocia','Haití'],
+  D:['USA','Turquía','Australia','Paraguay'],
+  E:['Alemania','Costa de Marfil','Ecuador','Curazao'],
+  F:['Países Bajos','Japón','Suecia','Túnez'],
+  G:['Bélgica','Irán','Egipto','Nueva Zelanda'],
+  H:['España','Uruguay','Arabia Saudita','Cabo Verde'],
+  I:['Francia','Senegal','Noruega','Irak'],
+  J:['Argentina','Austria','Argelia','Jordania'],
+  K:['Portugal','Colombia','Uzbekistán','RD Congo'],
+  L:['Inglaterra','Croacia','Ghana','Panamá'],
+};
+
+// ============================================================
+// STATE (localStorage)
+// ============================================================
+function load(key, def) { try { return JSON.parse(localStorage.getItem('wc26_'+key)) ?? def; } catch { return def; } }
+function save(key, val) { localStorage.setItem('wc26_'+key, JSON.stringify(val)); }
+
+let scores = load('scores', {});  // {matchId: {home:N, away:N}}
+let bets = load('bets', []);
+let initialCapital = load('capital', 0);
+let selectedResult = 'pending';
+let activeGroup = 'all';
+
+// ============================================================
+// NAV
+// ============================================================
+function showPage(id) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('page-'+id).classList.add('active');
+  event.target.classList.add('active');
+  if (id === 'grupos') renderGroups();
+  if (id === 'dashboard') renderDashboard();
+  if (id === 'escalera') renderEscalera();
+  if (id === 'partidos') renderMatches();
+}
+
+// ============================================================
+// MATCHES
+// ============================================================
+function renderGroupFilter() {
+  const el = document.getElementById('group-filter');
+  const groups = ['all','A','B','C','D','E','F','G','H','I','J','K','L'];
+  el.innerHTML = groups.map(g => `<button class="gf-btn${g===activeGroup?' active':''}" onclick="setActiveGroup('${g}',this)">${g==='all'?'Todos':('Grupo '+g)}</button>`).join('');
+}
+
+function setActiveGroup(g, btn) {
+  activeGroup = g;
+  document.querySelectorAll('.gf-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderMatches();
+}
+
+function favBadge(fav, label) {
+  const cls = fav==='home'?'badge-green':fav==='away'?'badge-amber':'badge-gray';
+  const icon = fav==='home'?'🏠':fav==='away'?'✈️':'⚖️';
+  return `<span class="badge ${cls}">${icon} ${label}</span>`;
+}
+
+function refHtml(m) {
+  if (m.ref === 'por confirmar') {
+    return `<div class="ref-bar"><span>🏁</span><div><span class="ref-name">Árbitro por confirmar</span><div class="ref-stats-row"><span>FIFA anunciará días antes del partido</span></div></div></div>`;
+  }
+  const strictness = m.refY >= 5 ? '🔴 Muy estricto' : m.refY >= 4 ? '🟠 Estricto' : '🟢 Permisivo';
+  return `<div class="ref-bar">
+    <span>🏁</span>
+    <div style="flex:1">
+      <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+        <span class="ref-name">${m.ref}</span>
+        <span style="font-size:11px;color:var(--text3)">${m.refCountry} · ${m.refConf}</span>
+        <span style="font-size:11px">${strictness}</span>
+      </div>
+      <div class="ref-stats-row">
+        <span class="ref-stat-item">🟨 ${m.refY.toFixed(1)} amarillas/pdo</span>
+        <span class="ref-stat-item">🟥 ${m.refR.toFixed(2)} rojas/pdo</span>
+        <span class="ref-stat-item">⚡ ${m.refFouls.toFixed(1)} faltas/pdo</span>
+        <span class="ref-stat-item" style="color:var(--text3)">${m.refGames} partidos</span>
+      </div>
+    </div>
+  </div>`;
+}
+
+function renderMatches() {
+  renderGroupFilter();
+  const search = (document.getElementById('match-search')?.value || '').toLowerCase();
+  const filtered = MATCHES.filter(m => {
+    const groupOk = activeGroup === 'all' || m.group === activeGroup;
+    const searchOk = !search || m.home.toLowerCase().includes(search) || m.away.toLowerCase().includes(search);
+    return groupOk && searchOk;
+  });
+
+  let html = '';
+  let currentGroup = '';
+  filtered.forEach(m => {
+    if (m.group !== currentGroup) {
+      currentGroup = m.group;
+      html += `<div style="font-size:11px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.08em;margin:1.25rem 0 .5rem;padding-left:4px">Grupo ${m.group}</div>`;
+    }
+    const sc = scores[m.id] || {};
+    const hsc = sc.home !== undefined ? sc.home : '';
+    const asc = sc.away !== undefined ? sc.away : '';
+    const played = hsc !== '' && asc !== '';
+    
+    html += `<div class="match-card">
+      <div class="match-header">
+        <span>📅 ${m.date} · 📍 ${m.venue}</span>
+        <span class="badge ${played?'badge-green':'badge-gray'}">${played?'Jugado':'Pendiente'}</span>
+      </div>
+      <div class="match-body">
+        <div class="match-teams">
+          <div class="team-box home">
+            <div class="team-name">${m.home}</div>
+            <div class="team-sub">Local</div>
+          </div>
+          <div class="score-box">
+            <input class="score-input" type="number" min="0" max="99" value="${hsc}" placeholder="—" onchange="saveScore('${m.id}','home',this.value)">
+            <span class="score-sep">—</span>
+            <input class="score-input" type="number" min="0" max="99" value="${asc}" placeholder="—" onchange="saveScore('${m.id}','away',this.value)">
+          </div>
+          <div class="team-box">
+            <div class="team-name">${m.away}</div>
+            <div class="team-sub">Visitante</div>
+          </div>
+        </div>
+        <div class="fav-label">${favBadge(m.fav, m.favLabel)}</div>
+        <div class="stats-grid-2">
+          <div class="card-sm">
+            <div style="font-size:11px;font-weight:700;color:var(--text3);margin-bottom:6px;text-transform:uppercase">${m.home}</div>
+            <div class="stat-row"><span class="stat-lbl">Córners/pdo</span><span class="stat-val2">${m.hCorners}</span></div>
+            <div class="stat-row"><span class="stat-lbl">Tiros a puerta</span><span class="stat-val2">${m.hShots}</span></div>
+            <div class="stat-row"><span class="stat-lbl">Offside/pdo</span><span class="stat-val2">${m.hOffside}</span></div>
+            <div class="stat-row"><span class="stat-lbl">Amarillas/pdo</span><span class="stat-val2">${m.hYellow}</span></div>
+          </div>
+          <div class="card-sm">
+            <div style="font-size:11px;font-weight:700;color:var(--text3);margin-bottom:6px;text-transform:uppercase">${m.away}</div>
+            <div class="stat-row"><span class="stat-lbl">Córners/pdo</span><span class="stat-val2">${m.aCorners}</span></div>
+            <div class="stat-row"><span class="stat-lbl">Tiros a puerta</span><span class="stat-val2">${m.aShots}</span></div>
+            <div class="stat-row"><span class="stat-lbl">Offside/pdo</span><span class="stat-val2">${m.aOffside}</span></div>
+            <div class="stat-row"><span class="stat-lbl">Amarillas/pdo</span><span class="stat-val2">${m.aYellow}</span></div>
+          </div>
+        </div>
+        ${refHtml(m)}
+      </div>
+    </div>`;
+  });
+  document.getElementById('matches-container').innerHTML = html || '<p style="color:var(--text2);padding:1rem 0">No se encontraron partidos.</p>';
+}
+
+function saveScore(id, side, val) {
+  if (!scores[id]) scores[id] = {};
+  scores[id][side] = val === '' ? undefined : parseInt(val);
+  if (val === '') delete scores[id][side];
+  save('scores', scores);
+  showToast('Resultado guardado ✓');
+}
+
+// ============================================================
+// GROUPS / STANDINGS
+// ============================================================
+function calcStandings() {
+  const standings = {};
+  Object.keys(GROUP_TEAMS).forEach(g => {
+    standings[g] = {};
+    GROUP_TEAMS[g].forEach(t => {
+      standings[g][t] = {team:t,p:0,w:0,d:0,l:0,gf:0,ga:0,gd:0,pts:0};
+    });
+  });
+  MATCHES.forEach(m => {
+    const sc = scores[m.id];
+    if (!sc || sc.home === undefined || sc.away === undefined) return;
+    const hg = sc.home, ag = sc.away;
+    const hs = standings[m.group][m.home];
+    const as = standings[m.group][m.away];
+    if (!hs || !as) return;
+    hs.p++; as.p++; hs.gf+=hg; hs.ga+=ag; as.gf+=ag; as.ga+=hg;
+    hs.gd=hs.gf-hs.ga; as.gd=as.gf-as.ga;
+    if (hg>ag){hs.w++;hs.pts+=3;as.l++;}
+    else if (hg<ag){as.w++;as.pts+=3;hs.l++;}
+    else{hs.d++;as.d++;hs.pts++;as.pts++;}
+  });
+  return standings;
+}
+
+function renderGroups() {
+  const st = calcStandings();
+  let html = '';
+  Object.keys(st).forEach(g => {
+    const teams = Object.values(st[g]).sort((a,b) => b.pts-a.pts||b.gd-a.gd||b.gf-a.gf);
+    html += `<div class="card" style="margin-bottom:1.25rem">
+      <h2 style="margin-bottom:1rem">Grupo ${g}
+        <span style="font-size:12px;font-weight:400;color:var(--text2);margin-left:8px">${GROUP_TEAMS[g].join(' · ')}</span>
+      </h2>
+      <div class="standings-wrap">
+      <table>
+        <thead><tr>
+          <th style="width:28px">#</th>
+          <th>Equipo</th>
+          <th title="Partidos">PJ</th>
+          <th title="Victorias">V</th>
+          <th title="Empates">E</th>
+          <th title="Derrotas">D</th>
+          <th title="Goles a favor">GF</th>
+          <th title="Goles en contra">GC</th>
+          <th title="Diferencia de gol">DG</th>
+          <th title="Puntos" style="color:var(--gold)">PTS</th>
+        </tr></thead>
+        <tbody>`;
+    teams.forEach((t,i) => {
+      const rowClass = i<2?'qualify-direct':i===2?'qualify-3rd':'eliminated';
+      html += `<tr class="${rowClass}">
+        <td class="pos-num">${i+1}</td>
+        <td style="font-weight:600">${t.team}</td>
+        <td>${t.p}</td><td>${t.w}</td><td>${t.d}</td><td>${t.l}</td>
+        <td>${t.gf}</td><td>${t.ga}</td>
+        <td style="${t.gd>0?'color:var(--green)':t.gd<0?'color:var(--red)':''}">${t.gd>0?'+':''}${t.gd}</td>
+        <td style="font-weight:700;color:var(--gold)">${t.pts}</td>
+      </tr>`;
+    });
+    html += `</tbody></table></div>
+      <div style="display:flex;gap:12px;margin-top:.75rem;font-size:11px;color:var(--text3)">
+        <span style="display:flex;align-items:center;gap:4px"><span style="width:3px;height:12px;background:var(--green);border-radius:2px"></span>Clasifican directo</span>
+        <span style="display:flex;align-items:center;gap:4px"><span style="width:3px;height:12px;background:var(--amber);border-radius:2px"></span>Posible mejor 3ro</span>
+        <span style="display:flex;align-items:center;gap:4px"><span style="width:3px;height:12px;background:var(--red);border-radius:2px"></span>Eliminados</span>
+      </div>
+    </div>`;
+  });
+  document.getElementById('groups-container').innerHTML = html;
+}
+
+// ============================================================
+// ESCALERA
+// ============================================================
+function saveCapital() {
+  initialCapital = parseFloat(document.getElementById('initial-capital').value) || 0;
+  save('capital', initialCapital);
+  renderCurrentCapital();
+  renderDashboard();
+}
+
+function getCurrentCapital() {
+  let cap = initialCapital;
+  bets.forEach(b => {
+    if (b.result === 'won') cap = cap - b.amount + b.amount * b.odds;
+    else if (b.result === 'lost') cap = cap - b.amount;
+  });
+  return cap;
+}
+
+function fmt(n) { return Math.round(n).toLocaleString('es-CO'); }
+
+function renderCurrentCapital() {
+  const cur = getCurrentCapital();
+  const diff = cur - initialCapital;
+  const pct = initialCapital > 0 ? ((diff/initialCapital)*100).toFixed(1) : 0;
+  document.getElementById('current-capital-card').innerHTML = `
+    <h3>Capital actual</h3>
+    <div class="capital-display">$${fmt(cur)}</div>
+    <div class="capital-change ${diff>=0?'up':'down'}">${diff>=0?'▲':'▼'} $${fmt(Math.abs(diff))} (${diff>=0?'+':''}${pct}%) vs inicial</div>
+    <div class="progress-bar" style="margin-top:10px"><div class="progress-fill" style="width:${Math.min(100,(cur/(initialCapital||1))*100).toFixed(0)}%"></div></div>`;
+}
+
+function openAddBet() {
+  document.getElementById('add-bet-form').style.display = 'block';
+  selectedResult = 'pending';
+  updateResButtons();
+  document.getElementById('bet-preview').style.display = 'none';
+}
+function closeAddBet() { document.getElementById('add-bet-form').style.display = 'none'; }
+
+function selectResult(r) { selectedResult = r; updateResButtons(); }
+function updateResButtons() {
+  ['pending','won','lost'].forEach(r => {
+    document.getElementById('res-'+r).style.opacity = selectedResult===r?'1':'0.4';
+  });
+}
+
+function previewBet() {
+  const amt = parseFloat(document.getElementById('bet-amount').value) || 0;
+  const odds = parseFloat(document.getElementById('bet-odds').value) || 0;
+  if (amt > 0 && odds > 1) {
+    const ret = amt * odds;
+    const profit = ret - amt;
+    document.getElementById('bet-preview').style.display = 'block';
+    document.getElementById('prev-stake').textContent = '$'+fmt(amt);
+    document.getElementById('prev-return').textContent = '$'+fmt(ret);
+    document.getElementById('prev-profit').textContent = '$'+fmt(profit);
+  }
+}
+
+function saveBet() {
+  const match = document.getElementById('bet-match').value.trim();
+  const type = document.getElementById('bet-type').value.trim();
+  const amount = parseFloat(document.getElementById('bet-amount').value) || 0;
+  const odds = parseFloat(document.getElementById('bet-odds').value) || 0;
+  if (!match || amount <= 0 || odds <= 1) { showToast('Completa todos los campos'); return; }
+  const bet = {id: Date.now(), match, type, amount, odds, result: selectedResult, date: new Date().toLocaleDateString('es-CO')};
+  bets.unshift(bet);
+  save('bets', bets);
+  closeAddBet();
+  document.getElementById('bet-match').value = '';
+  document.getElementById('bet-type').value = '';
+  document.getElementById('bet-amount').value = '';
+  document.getElementById('bet-odds').value = '';
+  renderEscalera();
+  renderDashboard();
+  showToast('Apuesta guardada ✓');
+}
+
+function updateBetResult(id, res) {
+  const bet = bets.find(b => b.id === id);
+  if (bet) { bet.result = res; save('bets', bets); renderEscalera(); renderDashboard(); showToast('Resultado actualizado ✓'); }
+}
+
+function deleteBet(id) {
+  if (!confirm('¿Eliminar esta apuesta?')) return;
+  bets = bets.filter(b => b.id !== id);
+  save('bets', bets);
+  renderEscalera();
+  renderDashboard();
+  showToast('Apuesta eliminada');
+}
+
+function renderEscalera() {
+  document.getElementById('initial-capital').value = initialCapital || '';
+  renderCurrentCapital();
+  let cap = initialCapital;
+  const entries = [...bets].reverse().map((b, i) => {
+    const ret = b.amount * b.odds;
+    const profit = ret - b.amount;
+    const capBefore = cap;
+    if (b.result === 'won') cap = capBefore - b.amount + ret;
+    else if (b.result === 'lost') cap = capBefore - b.amount;
+    return {...b, capBefore, capAfter: cap, profit, ret, step: i+1};
+  }).reverse();
+
+  let html = entries.length === 0 ? '<div class="card" style="text-align:center;color:var(--text2);padding:2rem">No hay apuestas aún. Agrega tu primera apuesta arriba ↑</div>' : '';
+  entries.forEach((b, idx) => {
+    const cls = b.result === 'won' ? 'won' : b.result === 'lost' ? 'lost' : 'pending';
+    const icon = b.result === 'won' ? '✅' : b.result === 'lost' ? '❌' : '⏳';
+    html += `<div class="ladder-entry ${cls}">
+      <span class="ladder-num">Apuesta #${entries.length - idx}</span>
+      <div style="display:flex;flex-wrap:wrap;gap:12px;align-items:flex-start;margin-bottom:.75rem">
+        <div>
+          <div style="font-weight:700;font-size:15px">${b.match}</div>
+          <div style="font-size:12px;color:var(--text2)">${b.type} · ${b.date}</div>
+        </div>
+        <span class="result-badge ${cls}">${icon} ${b.result === 'won'?'Ganada':b.result==='lost'?'Perdida':'Pendiente'}</span>
+      </div>
+      <div class="grid-4">
+        <div class="card-sm stat-chip"><span class="val">$${fmt(b.amount)}</span><span class="lbl">Apostado</span></div>
+        <div class="card-sm stat-chip"><span class="val" style="color:var(--blue)">${b.odds.toFixed(2)}</span><span class="lbl">Cuota</span></div>
+        <div class="card-sm stat-chip"><span class="val" style="color:var(--teal)">$${fmt(b.ret)}</span><span class="lbl">Retorno bruto</span></div>
+        <div class="card-sm stat-chip"><span class="val" style="${b.result==='won'?'color:var(--green)':b.result==='lost'?'color:var(--red)':'color:var(--amber)'}">${b.result==='won'?'+':b.result==='lost'?'-':''}$${fmt(Math.abs(b.profit))}</span><span class="lbl">Ganancia neta</span></div>
+      </div>
+      <div style="margin-top:.75rem;display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+        <span style="font-size:12px;color:var(--text2)">Cambiar resultado:</span>
+        <button class="btn btn-sm btn-outline" onclick="updateBetResult(${b.id},'pending')">⏳ Pendiente</button>
+        <button class="btn btn-sm btn-green" onclick="updateBetResult(${b.id},'won')">✅ Ganada</button>
+        <button class="btn btn-sm btn-red" onclick="updateBetResult(${b.id},'lost')">❌ Perdida</button>
+        <button class="btn btn-sm btn-red" onclick="deleteBet(${b.id})" style="margin-left:auto">🗑 Eliminar</button>
+      </div>
+    </div>`;
+  });
+  document.getElementById('bets-container').innerHTML = html;
+}
+
+// ============================================================
+// DASHBOARD
+// ============================================================
+function renderDashboard() {
+  const total = bets.length;
+  const won = bets.filter(b=>b.result==='won').length;
+  const lost = bets.filter(b=>b.result==='lost').length;
+  const pending = bets.filter(b=>b.result==='pending').length;
+  const cur = getCurrentCapital();
+  const diff = cur - initialCapital;
+  const played = MATCHES.filter(m=>{const s=scores[m.id];return s&&s.home!==undefined&&s.away!==undefined;}).length;
+
+  document.getElementById('dash-stats').innerHTML = `
+    <div class="card stat-chip"><span class="val">${played}</span><span class="lbl">Partidos ingresados</span></div>
+    <div class="card stat-chip"><span class="val">${total}</span><span class="lbl">Apuestas totales</span></div>
+    <div class="card stat-chip"><span class="val" style="color:var(--green)">${won}</span><span class="lbl">Ganadas</span></div>
+    <div class="card stat-chip"><span class="val" style="color:var(--red)">${lost}</span><span class="lbl">Perdidas</span></div>`;
+
+  document.getElementById('dash-capital').innerHTML = `
+    <h3>Balance general</h3>
+    <div style="margin-bottom:.75rem">
+      <div style="font-size:12px;color:var(--text2)">Capital inicial</div>
+      <div style="font-size:18px;font-weight:700">$${fmt(initialCapital)}</div>
+    </div>
+    <div style="margin-bottom:.75rem">
+      <div style="font-size:12px;color:var(--text2)">Capital actual</div>
+      <div class="capital-display" style="font-size:24px">$${fmt(cur)}</div>
+    </div>
+    <div style="font-size:14px;font-weight:600;${diff>=0?'color:var(--green)':'color:var(--red)'}">
+      ${diff>=0?'▲ Ganancia':'▼ Pérdida'}: $${fmt(Math.abs(diff))}
+    </div>
+    <div class="progress-bar" style="margin-top:10px"><div class="progress-fill" style="width:${Math.min(120,(cur/(initialCapital||1))*100).toFixed(0)}%;background:${diff>=0?'var(--green)':'var(--red)'}"></div></div>`;
+
+  const last5 = bets.slice(0,5);
+  document.getElementById('dash-ladder-preview').innerHTML = last5.length === 0
+    ? '<div class="card" style="color:var(--text2);text-align:center;padding:1.5rem">Sin apuestas aún</div>'
+    : last5.map(b => `<div class="card-sm" style="margin-bottom:8px;display:flex;align-items:center;justify-content:space-between">
+        <div>
+          <div style="font-weight:600;font-size:13px">${b.match}</div>
+          <div style="font-size:11px;color:var(--text2)">${b.type} · Cuota ${b.odds.toFixed(2)}</div>
+        </div>
+        <span class="result-badge ${b.result}">${b.result==='won'?'✅ Ganada':b.result==='lost'?'❌ Perdida':'⏳ Pendiente'}</span>
+      </div>`).join('');
+}
+
+// ============================================================
+// TOAST
+// ============================================================
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2000);
+}
+
+// ============================================================
+// INIT
+// ============================================================
+renderGroupFilter();
+renderMatches();
+renderDashboard();
+</script>
+</body>
+</html>
